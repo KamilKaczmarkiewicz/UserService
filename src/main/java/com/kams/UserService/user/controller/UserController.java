@@ -1,25 +1,22 @@
 package com.kams.UserService.user.controller;
 
-import com.kams.UserService.user.dto.CreateUserDto;
-import com.kams.UserService.user.dto.UpdateUserDto;
+import com.kams.UserService.user.exception.UserNotFoundException;
+import com.kams.UserService.user.view.UserModel;
+import com.kams.UserService.user.view.UserModelAssembler;
 import com.kams.UserService.user.entity.User;
-import com.kams.UserService.user.mapper.UserMapper;
 import com.kams.UserService.user.service.UserService;
-import com.kams.UserService.user.utils.PaginatedResponseFactory;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 
 
-/**
- * REST controller for user resource. Doesn't return entity objects but dto objects.
- */
 @RestController
 @RequestMapping(value = "/users")
 @AllArgsConstructor
@@ -27,50 +24,39 @@ public class UserController {
 
     private UserService userService;
 
-//todo check what we return
-//todo use everywhere dto
-//todo tests
+    private UserModelAssembler userModelAssembler;
 
-    /**
-     * @return list of users in JSON with pagination info
-     */
+    private PagedResourcesAssembler pagedResourcesAssembler;
+
     @GetMapping
-    public ResponseEntity getUsers(@RequestParam(name = "page", defaultValue = "0") int page
-            ,@RequestParam(name = "size", defaultValue = "3") int size
-            ,@RequestParam(name = "sort", defaultValue = "userName") String sort
-            ,@RequestParam(name = "sortDirection", defaultValue = "asc") String sortDirection
-            ,HttpServletRequest request){
-        Page<User> users = userService.findAll(page, size, sort, sortDirection);
-        Map<String, Object> response = PaginatedResponseFactory.paginateGetUsersResponse(users, request);
-        return ResponseEntity
-                .ok(response);
+    public PagedModel getUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(defaultValue = "userName,asc") List<String> sort){
+        Page<User> users = userService.findAll(page, size, sort);
+        return pagedResourcesAssembler.toModel(users, userModelAssembler);
     }
 
-    /**
-     * @param request - new user as CreateUserDto
-     * @return created user in JSON
-     */
     @PostMapping("/create")
-    public ResponseEntity createUser(@RequestBody CreateUserDto request) {
-        User user = userService.create(request);
+    public ResponseEntity createUser(@RequestBody User user) {
+        user = userService.create(user);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(UserMapper.UserToUserDto(user));
+                .body(
+                        "{\"Id\": " + user.getId() + "}"
+                );
     }
 
-    /**
-     * @param request - UpdateUserDto
-     * @param id - id of the user to update
-     * @return updated user in JSON
-     */
     @PutMapping("/{id}")
     public ResponseEntity updateUser(@PathVariable("id") long id,
-                                              @RequestBody UpdateUserDto request){
+                                              @RequestBody User request){
+        userService.update(request, id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}")
+    public UserModel getUser(@PathVariable("id") long id){
         Optional<User> user = userService.find(id);
-        if (user.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-        User updatedUser = userService.update(UserMapper.UpdateUserDtoToUser(user.get(), request));
-        return ResponseEntity.ok(UserMapper.UserToUserDto(updatedUser));
+        return userModelAssembler.toModel(user.orElseThrow(() -> new UserNotFoundException(id)));
     }
 }

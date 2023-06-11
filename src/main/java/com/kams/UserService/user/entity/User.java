@@ -5,30 +5,32 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * Entity for the users.
- */
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name="users")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    /**
-     * User's login and he's representation in app.
-     */
     @Column(name = "user_name")
     private String userName;
 
-    /**
-     * User's age.
-     */
     private int age;
+
+    @CreatedDate
+    @Column(name = "created_date")
+    private LocalDateTime createdTime;
+
+
 }
