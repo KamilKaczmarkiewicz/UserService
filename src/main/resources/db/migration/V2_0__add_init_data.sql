@@ -24,3 +24,14 @@ INSERT INTO users (user_name, age, created_date)
 VALUES ('LeJa',23, '2023-01-17 02:37:00.000000');
 INSERT INTO users (user_name, age, created_date)
 VALUES ('xXCoolGuyXx',2, '2023-06-01 02:37:01.000000');
+
+INSERT INTO notes (title, summary, content, user_id)
+VALUES ('Obiad w Hashisushi','Najlepsza restauracja sushi w jakiej jadłem', 'Tutaj mam treść notatki coś w stylu jakie to wspaniałe miejsce itp.', 1);
+INSERT INTO notes (title, summary, content, user_id)
+VALUES ('oryginalny tytuł','opis nad opisami', 'content jest kontent kontentowy', 1);
+INSERT INTO notes (title, summary, content, user_id)
+VALUES ('tytul 1','opis 1', 'content 1', 1);
+INSERT INTO notes (title, summary, content, user_id)
+VALUES ('tytul 2','opis 2', 'content 2', 2);
+INSERT INTO notes (title, summary, content, user_id)
+VALUES ('tytul 3','opis 3', 'content 3', 3);

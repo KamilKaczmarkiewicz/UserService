@@ -37,7 +37,7 @@ public class UserController {
         return pagedResourcesAssembler.toModel(users, userModelAssembler);
     }
 
-    @PostMapping("/create")
+    @PostMapping("")
     public ResponseEntity createUser(@RequestBody User user) {
         user = userService.create(user);
         return ResponseEntity

@@ -1,14 +1,14 @@
 package com.kams.UserService.user.entity;
 
+import com.kams.UserService.note.entity.Note;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -31,6 +31,10 @@ public class User {
     @CreatedDate
     @Column(name = "created_date")
     private LocalDateTime createdTime;
+
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
+    @ToString.Exclude
+    private List<Note> notes;
 
 
 }

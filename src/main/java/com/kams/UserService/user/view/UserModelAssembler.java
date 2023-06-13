@@ -27,12 +27,4 @@ public class UserModelAssembler implements RepresentationModelAssembler<User, Us
         return user;
     }
 
-
-    @Override
-    public CollectionModel<UserModel> toCollectionModel(Iterable<? extends User> entities) {
-        CollectionModel<UserModel> directorRepresentations = RepresentationModelAssembler.super.toCollectionModel(entities);
-
-
-        return directorRepresentations;
-    }
 }
