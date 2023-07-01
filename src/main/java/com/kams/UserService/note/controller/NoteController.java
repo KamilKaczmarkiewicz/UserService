@@ -7,7 +7,7 @@ import com.kams.UserService.note.requestDto.mapper.NoteRequestMapper;
 import com.kams.UserService.note.service.NoteService;
 import com.kams.UserService.note.view.NoteModel;
 import com.kams.UserService.note.view.NoteModelAssembler;
-import com.kams.UserService.user.exception.UserNotFoundException;
+import com.kams.UserService.user.exception.UserWithIdNotFoundException;
 import com.kams.UserService.user.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -50,7 +50,7 @@ public class NoteController {
     @PostMapping
     public ResponseEntity createNote (@RequestBody CreateNoteRequest request) {
         Note note = NoteRequestMapper.INSTANCE.createNoteRequestToNote(request);
-        note.setUser(userService.find(request.user_id()).orElseThrow(() -> new UserNotFoundException(request.user_id())));
+        note.setUser(userService.find(request.user_id()).orElseThrow(() -> new UserWithIdNotFoundException(request.user_id())));
         note = noteService.create(note);
         return ResponseEntity
                 .status(HttpStatus.CREATED)

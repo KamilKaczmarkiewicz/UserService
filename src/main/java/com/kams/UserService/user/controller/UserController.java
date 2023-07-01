@@ -1,6 +1,6 @@
 package com.kams.UserService.user.controller;
 
-import com.kams.UserService.user.exception.UserNotFoundException;
+import com.kams.UserService.user.exception.UserWithIdNotFoundException;
 import com.kams.UserService.user.view.UserModel;
 import com.kams.UserService.user.view.UserModelAssembler;
 import com.kams.UserService.user.entity.User;
@@ -32,7 +32,7 @@ public class UserController {
     public PagedModel getUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size,
-            @RequestParam(defaultValue = "userName,asc") List<String> sort){
+            @RequestParam(defaultValue = "username,asc") List<String> sort){
         Page<User> users = userService.findAll(page, size, sort);
         return pagedResourcesAssembler.toModel(users, userModelAssembler);
     }
@@ -57,6 +57,6 @@ public class UserController {
     @GetMapping("/{id}")
     public UserModel getUser(@PathVariable("id") long id){
         Optional<User> user = userService.find(id);
-        return userModelAssembler.toModel(user.orElseThrow(() -> new UserNotFoundException(id)));
+        return userModelAssembler.toModel(user.orElseThrow(() -> new UserWithIdNotFoundException(id)));
     }
 }

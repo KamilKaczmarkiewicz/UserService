@@ -2,7 +2,7 @@ package com.kams.UserService.user.service;
 
 
 import com.kams.UserService.user.entity.User;
-import com.kams.UserService.user.exception.UserNotFoundException;
+import com.kams.UserService.user.exception.UserWithIdNotFoundException;
 import com.kams.UserService.user.exception.WrongUpdateUserIdException;
 import com.kams.UserService.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -47,7 +47,7 @@ public class UserService {
 
     public User update(User newUser, long id){
         Optional<User> user = find(id);
-        if(newUser.getId()==user.orElseThrow(() -> new UserNotFoundException(id)).getId())
+        if(newUser.getId()==user.orElseThrow(() -> new UserWithIdNotFoundException(id)).getId())
         {
             return userRepository.save(newUser);
         }

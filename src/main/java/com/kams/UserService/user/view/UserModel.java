@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class UserModel extends RepresentationModel<UserModel> {
 
-    private String userName;
+    private String username;
 
     private int age;
 

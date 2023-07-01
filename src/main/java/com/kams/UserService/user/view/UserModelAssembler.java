@@ -18,7 +18,7 @@ public class UserModelAssembler implements RepresentationModelAssembler<User, Us
     @Override
     public UserModel toModel(User entity) {
         UserModel user = UserModel.builder()
-                .userName(entity.getUserName())
+                .username(entity.getUsername())
                 .age(entity.getAge())
                 .createdTime(entity.getCreatedTime())
                 .build();

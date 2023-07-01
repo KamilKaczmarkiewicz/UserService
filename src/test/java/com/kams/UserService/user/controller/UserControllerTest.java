@@ -36,12 +36,12 @@ public class UserControllerTest {
     public void setUp() {
         userRepository.deleteAll();
         User user1 = new User();
-        user1.setUserName("User1");
+        user1.setUsername("User1");
         user1.setAge(25);
         userRepository.save(user1);
 
         User user2 = new User();
-        user2.setUserName("User2");
+        user2.setUsername("User2");
         user2.setAge(30);
         userRepository.save(user2);
     }
@@ -54,10 +54,10 @@ public class UserControllerTest {
 
     @Test
     public void createUserTest() throws Exception {
-        String newUserName = "User3";
+        String newUsername = "User3";
         int newAge = 35;
         User user = User.builder()
-                .userName(newUserName)
+                .username(newUsername)
                 .age(newAge)
                 .build();
 
@@ -70,20 +70,20 @@ public class UserControllerTest {
         JSONObject object = new JSONObject(content);
         long idOfNewUser = Long.parseLong(object.get("Id").toString());
         User newUser = userRepository.findById(idOfNewUser).get();
-        Assertions.assertEquals(newUser.getUserName(), newUserName);
+        Assertions.assertEquals(newUser.getUsername(), newUsername);
         Assertions.assertEquals(newUser.getAge(), newAge);
     }
 
     @Test
     public void updateUserWithValidIdTest() throws Exception {
-        Optional<User> optionalUser = userRepository.findByUserName("User1");
+        Optional<User> optionalUser = userRepository.findByUsername("User1");
         long userId = optionalUser.get().getId();
 
-        String newUserName = "User3";
+        String newUsername = "User3";
         int newAge = 35;
         User updateUser = User.builder()
                 .id(userId)
-                .userName(newUserName)
+                .username(newUsername)
                 .age(newAge)
                 .build();
 
@@ -101,7 +101,7 @@ public class UserControllerTest {
 
         User updateUser = User.builder()
                 .id(invalidUserId)
-                .userName("User3")
+                .username("User3")
                 .age(35)
                 .build();
 
